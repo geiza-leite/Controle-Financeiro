@@ -1,0 +1,338 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Controle Financeiro</title>
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+<div id="telaLogin">
+
+<h1>💰 Controle Financeiro</h1>
+
+<input
+type="email"
+id="email"
+placeholder="E-mail"
+>
+
+<input
+type="password"
+id="senha"
+placeholder="Senha"
+onkeydown="if(event.key==='Enter') login()"
+>
+
+<button onclick="login()">
+Entrar
+</button>
+
+<button onclick="cadastrar()">
+Cadastrar
+</button>
+
+<button onclick="recuperarSenha()">
+Recuperar senha
+</button>
+
+</div>
+
+<main class="app" id="app" style="display:none;">
+
+<header>
+
+<h1>💰 Controle Financeiro</h1>
+
+<div class="empresa-box">
+
+
+<div class="topo-app">
+
+    <button
+    type="button"
+    class="btn-menu"
+    onclick="abrirFecharMenu()">
+        ☰
+    </button>
+
+    <div
+    id="usuarioAtual"
+    class="usuario-app">
+    </div>
+
+</div>
+
+<div id="menuAcoes" class="menu-acoes">
+
+        <button type="button" onclick="copiarMesAnterior()">
+            📋 Copiar Mês Anterior
+        </button>
+
+        <button type="button" onclick="limparMesAtual()">
+            🗑 Limpar Mês
+        </button>
+
+        <button type="button" onclick="gerarPDF()">
+            📄 Gerar PDF
+        </button>
+
+        <button type="button" onclick="exportarBackup()">
+            💾 Exportar Backup
+        </button>
+
+        <button type="button" onclick="document.getElementById('importarBackup').click()">
+            📥 Importar Backup
+        </button>
+
+        <button type="button" onclick="logout()">
+            🚪 Sair
+        </button>
+
+    </div>
+
+
+
+<div class="topo">
+
+<select id="mes" aria-label="Selecionar mês" onchange="carregarMes()">
+<option>Janeiro</option>
+<option>Fevereiro</option>
+<option>Março</option>
+<option>Abril</option>
+<option>Maio</option>
+<option>Junho</option>
+<option>Julho</option>
+<option>Agosto</option>
+<option>Setembro</option>
+<option>Outubro</option>
+<option>Novembro</option>
+<option>Dezembro</option>
+</select>
+
+<select id="ano" aria-label="Selecionar ano" onchange="carregarMes()"></select>
+
+
+
+<input
+type="file"
+id="importarBackup"
+accept=".json"
+style="display:none"
+onchange="importarBackup(event)"
+>
+
+</div>
+
+</header>
+
+<!-- FIXOS -->
+
+<div class="grid">
+
+<div class="card">
+
+<div class="titulo-card" onclick="alternarCard('entradas')">
+<h2>
+    💰 Entradas
+    <button
+type="button"
+class="btn-seta"
+id="seta-entradas">
+▼
+</button>
+</h2>
+<button type="button" onclick="event.stopPropagation(); addItem('entradas')">+</button>
+</div>
+
+<div id="entradas" class="conteudo-recolhivel"></div>
+
+<div class="total-card">
+Total: R$ <span id="totalEntradas">0,00</span>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="titulo-card" onclick="alternarCard('contas')">
+<h2>
+    📄 Contas Fixas
+   <button
+type="button"
+class="btn-seta"
+id="seta-contas">
+▼
+</button>
+</h2>
+<button type="button" onclick="event.stopPropagation(); addItem('contas')">+</button>
+</div>
+
+<div id="contas" class="conteudo-recolhivel"></div>
+
+<div class="total-card">
+Total: R$ <span id="totalContas">0,00</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- CATEGORIAS -->
+
+<div class="card">
+
+    <div class="categorias-topo">
+
+        <h2>📂 Categorias Extras</h2>
+
+        <div class="nova-categoria">
+
+            <input
+            type="text"
+            id="nomeCategoria"
+            placeholder="Nova categoria"
+            />
+
+            <button
+type="button"
+onclick="novaCategoria()">
+</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="categorias" class="grid"></div>
+
+
+<!-- DASHBOARD -->
+
+<div class="dashboard-cards">
+
+    <div class="mini-card">
+
+        <span>
+        💰 Entradas
+        </span>
+
+        <strong id="cardEntradas">
+        R$ 0,00
+        </strong>
+
+    </div>
+
+    <div class="mini-card">
+
+    <span>
+    📉 Despesas
+    </span>
+
+    <strong id="cardDespesas">
+    R$ 0,00
+    </strong>
+
+</div>
+
+    <div class="mini-card">
+
+        <span>
+        ⚠️ Falta pagar
+        </span>
+
+        <strong id="cardFaltante">
+        R$ 0,00
+        </strong>
+
+    </div>
+
+    <div class="mini-card">
+
+        <span>
+        ✅ Saldo
+        </span>
+
+        <strong id="cardSaldo">
+        R$ 0,00
+        </strong>
+
+    </div>
+
+</div>
+
+<!-- GRAFICO -->
+
+<div class="card grafico-card">
+
+<h2>📊 Resumo de Gastos</h2>
+
+<canvas id="grafico"></canvas>
+
+
+</div>
+
+<footer>
+Criado por Geiza Leite
+</footer>
+
+</main>
+
+<div id="toast"></div>
+
+<div id="modalConfirmacao">
+
+    <div class="modal-box">
+
+        <h2>⚠️ Confirmar exclusão</h2>
+
+        <p>Deseja apagar os dados deste mês?</p>
+
+        <div class="modal-botoes">
+
+            <button
+            type="button"
+            onclick="fecharModal()"
+            class="cancelar"
+            >
+            Cancelar
+            </button>
+
+            <button
+            type="button"
+            onclick="confirmarLimpeza()"
+            class="apagar"
+            >
+            Apagar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script defer src="script.js"></script>
+
+
+</body>
+</html>
+
