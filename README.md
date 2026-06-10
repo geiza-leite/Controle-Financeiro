@@ -1,5 +1,3 @@
-# Controle-Financeiro
-Sistema de controle financeiro pessoal com login, categorias, dashboard, PDF e backup.
 # Controle Financeiro
 
 Sistema de controle financeiro pessoal desenvolvido em HTML, CSS e JavaScript com Firebase.
