@@ -23,3 +23,6 @@ Sistema de controle financeiro pessoal desenvolvido em HTML, CSS e JavaScript co
 - Firebase Realtime Database
 - Chart.js
 - jsPDF
+
+- Versão 1.0
+Junho/2026
